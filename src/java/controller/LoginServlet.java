@@ -4,19 +4,15 @@
  */
 package controller;
 
-import dao.MyDAO;
-import dao.UserDAO;
+import dal.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import model.User;
 
 /**
@@ -30,19 +26,37 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String account = req.getParameter("account");
         String password = req.getParameter("password");
+
+        if (account == null || password == null || account.isEmpty() || password.isEmpty()) {
+            req.setAttribute("errorMessage", "Vui lòng nhập tài khoản và mật khẩu!");
+            req.getRequestDispatcher("login.jsp").forward(req, resp);
+            return;
+        }
+
         String hashPass = String.valueOf(password.hashCode());
         UserDAO ud = new UserDAO();
         User user = ud.getUserByAccount(account, hashPass);
-        if (user.getRole() != null) {
-            if (user.getRole().equalsIgnoreCase("Citizen")) {
-                req.getRequestDispatcher("/citizen/home.jsp").forward(req, resp);
-            } else if (user.getRole().equalsIgnoreCase("Police")) {
-                req.getRequestDispatcher("/police/home.jsp").forward(req, resp);
-            } else if (user.getRole().equalsIgnoreCase("AreaLead")) {
-                req.getRequestDispatcher("/arealeader/home.jsp").forward(req, resp);
-            }
-        }
-        
-    }
 
+        if (user == null) {
+            req.setAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu!");
+            req.getRequestDispatcher("login.jsp").forward(req, resp);
+            return;
+        }
+
+        HttpSession session = req.getSession();
+        session.setAttribute("user", user);
+
+        if (user.getRole().equalsIgnoreCase("Citizen")) {
+            resp.sendRedirect("citizen/home.jsp");
+        } else if (user.getRole().equalsIgnoreCase("Police")) {
+            resp.sendRedirect("police/home.jsp");
+        } else if (user.getRole().equalsIgnoreCase("AreaLead")) {
+            resp.sendRedirect("arealeader/home.jsp");
+        } else {
+            req.setAttribute("errorMessage", "Vai trò không hợp lệ!");
+            req.getRequestDispatcher("login.jsp").forward(req, resp);
+        }
+    }
 }
+
+
