@@ -8,7 +8,7 @@ CREATE TABLE Users (
     Password VARCHAR(255) NOT NULL,
     FullName NVARCHAR(255),
     Email VARCHAR(255) UNIQUE,
-    Role VARCHAR(50),
+    Role VARCHAR(20) NOT NULL CONSTRAINT CK_Users_Role CHECK (Role IN ('Citizen', 'AreaLeader', 'Police')),
     Address NVARCHAR(255)
 );
 go
@@ -60,52 +60,61 @@ CREATE TABLE Logs (
 );
 go
 INSERT INTO Users (UserName, Password, FullName, Email, Role, Address) VALUES
-('user1', 'hashed_password_1', N'Nguyễn Văn A', 'user1@example.com', 'user', N'Hà Nội'),
-('user2', 'hashed_password_2', N'Trần Thị B', 'user2@example.com', 'admin', N'Hồ Chí Minh'),
-('user3', 'hashed_password_3', N'Lê Văn C', 'user3@example.com', 'user', N'Đà Nẵng'),
-('user4', 'hashed_password_4', N'Phạm Thị D', 'user4@example.com', 'user', N'Cần Thơ'),
-('user5', 'hashed_password_5', N'Hoàng Văn E', 'user5@example.com', 'user', N'Hải Phòng'),
-('user6', 'hashed_password_6', N'Đỗ Thị F', 'user6@example.com', 'admin', N'Huế'),
-('user7', 'hashed_password_7', N'Vũ Văn G', 'user7@example.com', 'user', N'Nha Trang'),
-('user8', 'hashed_password_8', N'Ngô Thị H', 'user8@example.com', 'user', N'Vũng Tàu'),
-('user9', 'hashed_password_9', N'Phan Văn I', 'user9@example.com', 'user', N'Hà Giang'),
-('user10', 'hashed_password_10', N'Tôn Thị K', 'user10@example.com', 'user', N'Cao Bằng');
+('citizen', '784989032', N'Nguyễn Văn A', 'user1@example.com', 'Citizen', N'Hà Nội'),
+('arealeader', '1533589462', N'Trần Thị B', 'user2@example.com', 'Arealeader', N'Hồ Chí Minh'),
+('police', '-982670050', N'Lê Văn C', 'user3@example.com', 'Police', N'Đà Nẵng');
+-- User 1: Citizen
+INSERT INTO Users (UserName, Password, FullName, Email, Role, Address)
+VALUES ('citizen1', 'password123', N'Nguyễn Văn A', 'citizen1@example.com', 'Citizen', N'123 Đường ABC, Quận 1, TP.HCM');
+
+-- User 2: AreaLeader
+INSERT INTO Users (UserName, Password, FullName, Email, Role, Address)
+VALUES ('arealeader1', 'securepass', N'Trần Thị B', 'arealeader1@example.com', 'AreaLeader', N'456 Đường XYZ, Quận 2, TP.HCM');
+
+-- User 3: Police
+INSERT INTO Users (UserName, Password, FullName, Email, Role, Address)
+VALUES ('police1', 'policesecure', N'Lê Văn C', 'police1@example.com', 'Police', N'789 Đường MNO, Quận 3, TP.HCM');
+
+-- User 4: Citizen
+INSERT INTO Users (UserName, Password, FullName, Email, Role, Address)
+VALUES ('citizen2', 'pass456', N'Phạm Thị D', 'citizen2@example.com', 'Citizen', N'101 Đường PQR, Quận 4, TP.HCM');
+
+-- User 5: AreaLeader
+INSERT INTO Users (UserName, Password, FullName, Email, Role, Address)
+VALUES ('arealeader2', 'strongpass', N'Hoàng Văn E', 'arealeader2@example.com', 'AreaLeader', N'112 Đường STU, Quận 5, TP.HCM');
+
+-- User 6: Police
+INSERT INTO Users (UserName, Password, FullName, Email, Role, Address)
+VALUES ('police2', 'supersecure', N'Vũ Thị F', 'police2@example.com', 'Police', N'123 Đường VWX, Quận 6, TP.HCM');
+
+-- User 7: Citizen
+INSERT INTO Users (UserName, Password, FullName, Email, Role, Address)
+VALUES ('citizen3', 'password789', N'Đặng Văn G', 'citizen3@example.com', 'Citizen', N'134 Đường YZA, Quận 7, TP.HCM');
+
+-- User 8: AreaLeader
+INSERT INTO Users (UserName, Password, FullName, Email, Role, Address)
+VALUES ('arealeader3', 'verysecure', N'Mai Thị H', 'arealeader3@example.com', 'AreaLeader', N'145 Đường BCD, Quận 8, TP.HCM');
+
+-- User 9: Police
+INSERT INTO Users (UserName, Password, FullName, Email, Role, Address)
+VALUES ('police3', 'ultrasecure', N'Cao Văn I', 'police3@example.com', 'Police', N'156 Đường EFG, Quận 9, TP.HCM');
+
+-- User 10: Citizen
+INSERT INTO Users (UserName, Password, FullName, Email, Role, Address)
+VALUES ('citizen4', 'pass1011', N'Trịnh Thị K', 'citizen4@example.com', 'Citizen', N'167 Đường HIJ, Quận 10, TP.HCM');
 go
 INSERT INTO Households (HeadID, Address) VALUES
-(1, '123 Main St, Hanoi'),
-(2, '456 Oak Ave, HCMC'),
-(3, '789 Pine Ln, Danang'),
-(4, '101 Elm Rd, Cantho'),
-(5, '112 Maple Dr, Haiphong'),
-(6, '131 Willow Ct, Hue'),
-(7, '141 Birch St, Nhatrang'),
-(8, '151 Cedar Blvd, Vungtau'),
-(9, '161 Spruce Pl, Hagiang'),
-(10, '171 Aspen Way, Caobang');
+(1, '123 Main St, Hanoi');
 go
 INSERT INTO Registrations (UserID, RegisType, StartDate, EndDate, Status, ApprovedBy, Comment) VALUES
-(1, 'Type A', '2023-01-01', '2023-01-31', 'Approved', 2, 'Approved by admin'),
-(2, 'Type B', '2023-02-01', '2023-02-28', 'Pending', 6, 'Waiting for approval'),
-(3, 'Type C', '2023-03-01', '2023-03-31', 'Rejected', 2, 'Rejected due to incomplete info'),
-(4, 'Type A', '2023-04-01', '2023-04-30', 'Approved', 6, 'Automatic approval'),
-(5, 'Type B', '2023-05-01', '2023-05-31', 'Approved', 2, 'Manual approval'),
-(6, 'Type C', '2023-06-01', '2023-06-30', 'Pending', 6, 'New request'),
-(7, 'Type A', '2023-07-01', '2023-07-31', 'Approved', 2, 'Verified'),
-(8, 'Type B', '2023-08-01', '2023-08-31', 'Rejected', 6, 'Did not meet criteria'),
-(9, 'Type C', '2023-09-01', '2023-09-30', 'Approved', 2, 'Followed up'),
-(10, 'Type A', '2023-10-01', '2023-10-31', 'Pending', 6, 'Under review');
+(1, 'Type A', '2023-01-01', '2023-01-31', 'Approved', 1, 'Approved by admin');
 go
 INSERT INTO Members (HouseholdID, UserID, Relationship) VALUES
 (1, 1, 'Head'),
 (1, 3, 'Child'),
-(2, 2, 'Head'),
-(2, 4, 'Spouse'),
-(3, 3, 'Head'),
-(3, 5, 'Child'),
-(4, 4, 'Head'),
-(4, 6, 'Parent'),
-(5, 5, 'Head'),
-(5, 7, 'Sibling');
+(1, 4, 'Spouse'),
+(1, 6, 'Parent'),
+(1, 7, 'Sibling');
 go
 INSERT INTO Notifications (UserID, Message, SentDate) VALUES
 (1, 'Welcome to our platform!', '2023-11-15'),
