@@ -1,7 +1,7 @@
 <%-- 
-    Document   : home
-    Created on : Feb 14, 2025, 2:11:57 PM
-    Author     : VIET
+    Document   : registerTemporaryResidence
+    Created on : Feb 18, 2025, 4:42:47 PM
+    Author     : troqu
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -13,7 +13,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Citizen Dashboard</title>
+    <title>Đăng ký Tạm trú</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,7 +49,6 @@
             justify-content: center;
         }
         .navbar a {
-            float: left;
             display: block;
             color: white;
             text-align: center;
@@ -63,37 +62,53 @@
         .container {
             padding: 20px;
         }
-        .welcome {
-            margin-bottom: 20px;
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
         }
-        .citizen-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+        .form-container h2 {
+            text-align: center;
         }
-        .citizen-actions a {
-            flex: 1 1 calc(33.333% - 20px);
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .submit-btn {
             background-color: #2980b9;
             color: white;
-            padding: 20px;
-            text-align: center;
-            text-decoration: none;
+            padding: 10px 15px;
+            border: none;
             border-radius: 5px;
-            transition: background-color 0.3s;
+            cursor: pointer;
+            width: 100%;
         }
-        .citizen-actions a:hover {
+        .submit-btn:hover {
             background-color: #1f618d;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Citizen Dashboard</h1>
+        <h1>Đăng ký Tạm trú</h1>
         <a href="logout" class="logout-btn">Đăng xuất</a>
     </div>
     <div class="navbar">
-        <a href="citizenDashboard.jsp">Trang chủ</a>
+        <a href="home.jsp">Trang chủ</a>
         <a href="citizen.jsp">Quản lý công dân</a>
+
         <a href="registerTemporaryResidence.jsp">Đăng ký tạm trú</a>
         <a href="registerTemporaryAbsence.jsp">Đăng ký tạm vắng</a>
         <a href="citizenApplications.jsp">Hồ sơ của tôi</a>
@@ -101,17 +116,27 @@
         <a href="support.jsp">Hỗ trợ</a>
     </div>
     <div class="container">
-        <div class="welcome">
-            <h2>Chào mừng, <%= (user != null) ? user.getFullName() : "Công dân" %>!</h2>
-            <p>Quản lý thông tin tạm trú, tạm vắng và cập nhật trạng thái hồ sơ của bạn tại đây.</p>
-        </div>
-        <div class="citizen-actions">
-            <a href="citizen.jsp">Quản lý công dân</a>
-            <a href="registerTemporaryResidence.jsp">Đăng ký tạm trú</a>
-            <a href="registerTemporaryAbsence.jsp">Đăng ký tạm vắng</a>
-            <a href="citizenApplications.jsp">Theo dõi hồ sơ</a>
-            <a href="notifications.jsp">Xem thông báo</a>
-            <a href="support.jsp">Liên hệ hỗ trợ</a>
+        <div class="form-container">
+            <h2>Form Đăng ký Tạm trú</h2>
+            <form action="submitTemporaryResidence" method="post">
+                <div class="form-group">
+                    <label for="fullName">Họ và Tên:</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+                <div class="form-group">
+                    <label for="cccd">CCCD:</label>
+                    <input type="text" id="cccd" name="cccd" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Địa chỉ tạm trú:</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+                <div class="form-group">
+                    <label for="reason">Lý do tạm trú:</label>
+                    <textarea id="reason" name="reason" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Gửi Đăng ký</button>
+            </form>
         </div>
     </div>
 </body>
